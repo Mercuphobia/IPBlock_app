@@ -6,8 +6,8 @@
 // #define DATA_TXT_PATH "./data/data.txt"
 // #define BLOCK_WEB_TXT_PATH "./data/block_web.txt"
 
-#define DATA_TXT_PATH "../data/data.txt"
-#define BLOCK_WEB_TXT_PATH "../data/block_web.txt"
+#define DATA_TXT_PATH "../../block_app/data/data.txt"
+#define BLOCK_WEB_TXT_PATH "../../block_app/data/block_web.txt"
 
 #define INIT_NUMBER_STRUCT 10
 #define NUMBER_STRUCT_INCREASE 2

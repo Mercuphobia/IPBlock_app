@@ -36,8 +36,8 @@
 // #define IP_TXT_PATH "./data/ip.txt"
 // #define CHECK_TXT_PATH "./data/check.txt"
 
-#define IP_TXT_PATH "../data/ip.txt"
-#define CHECK_TXT_PATH "../data/check.txt"
+#define IP_TXT_PATH "../../block_app/data/ip.txt"
+#define CHECK_TXT_PATH "../../block_app/data/check.txt"
 
 
 #define REST_TIME_BETWEEN_RUN 30

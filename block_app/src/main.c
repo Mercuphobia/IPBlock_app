@@ -23,10 +23,10 @@
 
 #define SRC_WEB_BLOCK_PATH "../../webserver/config/url_data.txt"
 #define DES_WEB_BLOCK_PATH "../../block_app/data/block_web.txt"
-#define BLOCK_WEB "../data/block_web.txt"
-#define IP_FILE "../data/ip.txt"
-#define CHECK_FILE "../data/check.txt"
-#define FILE_DATA "../data/data.txt"
+#define BLOCK_WEB "../../block_app/data/block_web.txt"
+#define IP_FILE "../../block_app/data/ip.txt"
+#define CHECK_FILE "../../block_app/data/check.txt"
+#define FILE_DATA "../../block_app/data/data.txt"
 
 
 //block_app
@@ -63,14 +63,11 @@ int main(int argc, char *argv[]) {
     LOG(LOG_LVL_ERROR, "testapp1_2: %s, %s, %d\n", __FILE__, __func__, __LINE__);
     signal(SIGINT, cleanup);
     clear_file_to_run(FILE_DATA);
+    clear_file_to_run(BLOCK_WEB);
     transfer_data(SRC_WEB_BLOCK_PATH,DES_WEB_BLOCK_PATH);
     start_packet_capture();
     free_recorded_list();
-    // app2
-    app2();
-
 }
-
 
 
 // pthread_t thread1, thread2;

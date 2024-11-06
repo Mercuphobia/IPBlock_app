@@ -35,7 +35,7 @@
 #define RULE_FORWARD_SPORT "iptables -I FORWARD 1 -j NFQUEUE --queue-num 0"
 
 
-#define FILE_DATA "../data/data.txt"
+#define FILE_DATA "../../block_app/data/data.txt"
 
 
 void cleanup()

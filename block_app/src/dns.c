@@ -21,8 +21,8 @@
 
 // #define FILE_DATA "./data/data.txt"
 
-#define FILE_DATA "../data/data.txt"
-#define BLOCK_WEB_TXT_PATH "../data/block_web.txt"
+#define FILE_DATA "../../block_app/data/data.txt"
+#define BLOCK_WEB_TXT_PATH "../../block_app/data/block_web.txt"
 
 
 typedef struct {

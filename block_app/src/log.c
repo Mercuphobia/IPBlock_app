@@ -3,7 +3,7 @@
 #include "time.h"
 // #define LOG_FILE_PATH "./data/log.txt"
 
-#define LOG_FILE_PATH "../data/log.txt"
+#define LOG_FILE_PATH "../../block_app/data/log.txt"
 
 const char *log_level_strings[] =
     {
