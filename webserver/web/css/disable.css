@@ -1,0 +1,77 @@
+/* Thay đổi kích thước tối đa của container */
+.custom {
+    max-width: 800px in !important;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Thiết lập khoảng cách giữa các nhóm form */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Định dạng nhãn cho các trường nhập */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Định dạng input và select để mở rộng hết chiều rộng cột */
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Định dạng cho các nút */
+.btn {
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Định dạng cho nút "Add" */
+.btn-add {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển đổi */
+}
+
+.btn-add:hover {
+    background-color: #0056b3; /* Thay đổi màu khi hover */
+}
+
+/* Định dạng cho nút "Confirm" */
+.btn-confirm {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển đổi */
+}
+
+.btn-confirm:hover {
+    background-color: #218838; /* Thay đổi màu khi hover */
+}
+
+/* Định dạng danh sách URL */
+.url-list {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa; /* Màu nền cho danh sách */
+}
+
+/* Định dạng cho từng mục trong danh sách URL */
+.url-item {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    border: 1px solid #ddd; /* Thêm viền cho mục */
+}
