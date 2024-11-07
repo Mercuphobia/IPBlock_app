@@ -10,18 +10,18 @@
 
 
 // run board//
-#define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
-#define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
-#define IPSET_ADD "/userfs/bin/ipset add %s %s"
-#define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld"
-#define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
+// #define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
+// #define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
+// #define IPSET_ADD "/userfs/bin/ipset add %s %s"
+// #define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld"
+// #define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
 
 //run vmware//
-// #define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
-// #define IPSET_CREATE "ipset create %s hash:ip"
-// #define IPSET_ADD "ipset add %s %s"
-// #define IPSET_DELETE_RULE "ipset destroy %s_%ld"
-// #define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
+#define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
+#define IPSET_CREATE "ipset create %s hash:ip"
+#define IPSET_ADD "ipset add %s %s"
+#define IPSET_DELETE_RULE "ipset destroy %s_%ld"
+#define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
 
 
 #define IP_TABLES_ADD_INPUT "iptables -I INPUT -m set --match-set %s_%ld src -j DROP"

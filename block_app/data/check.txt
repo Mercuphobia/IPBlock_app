@@ -1,3 +1,4 @@
+dantri.com.vn, 36000, 431940
 www.youtube.com, 129600, 202800
 www.youtube.com, 202920, 229500
 www.youtube.com, 229320, 309120

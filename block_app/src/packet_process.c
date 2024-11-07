@@ -157,13 +157,6 @@ void start_packet_capture()
         exit(1);
     }
 
-    // extra code
-
-    // if (qh != NULL) {
-    //     nfq_destroy_queue(qh);
-    //     qh = NULL;
-    // }
-    // end extra
     qh = nfq_create_queue(h, 0, &cb, NULL);
     if (!qh)
     {   
