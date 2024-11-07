@@ -66,7 +66,7 @@
             </div>
         </nav>
     </section>
-    
+
     <section>
         <div class="container custom">
             <div class="row">
@@ -75,7 +75,7 @@
                     <div class="form-group">
                         <label for="url">URL:</label>
                         <input type="text" id="url" class="form-control" placeholder="example.com">
-                    </div>       
+                    </div>
                     <div class="form-group">
                         <label for="start-time">Start Time:</label>
                         <select id="start-day" class="form-control">
@@ -89,7 +89,7 @@
                         </select>
                         <input type="time" id="start-time" class="form-control">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="end-time">End Time:</label>
                         <select id="end-day" class="form-control">
@@ -103,13 +103,15 @@
                         </select>
                         <input type="time" id="end-time" class="form-control">
                     </div>
-                    
+
                     <button class="btn btn-add" onclick="addUrl()">Add</button>
                     <button class="btn btn-confirm" onclick="confirm()">Confirm</button>
-                    
+
                     <div class="mt-3">
-                        <button id="enableBtn" class="btn btn-enable" onclick="toggleEnableDisable(true)">Enable</button>
-                        <button id="disableBtn" class="btn btn-disable" onclick="toggleEnableDisable(false)" disabled>Disable</button>
+                        <button id="enableBtn" class="btn btn-enable"
+                            onclick="toggleEnableDisable(true)">Enable</button>
+                        <button id="disableBtn" class="btn btn-disable" onclick="toggleEnableDisable(false)"
+                            disabled>Disable</button>
                     </div>
                 </div>
 
@@ -124,12 +126,6 @@
     </section>
 
     <script>
-
-        // Check and set the initial button state on page load
-        window.onload = function() {
-            const isEnable = localStorage.getItem('isEnable') === 'true';
-            toggleEnableDisable(isEnable);
-        };
 
         function addUrl() {
             const url = document.getElementById('url').value;
@@ -176,7 +172,7 @@
                 const url = urlItem[0].split(': ')[1];
                 const start = urlItem[1].split(': ')[1];
                 const end = urlItem[2].split(': ')[1];
-                
+
                 textData += `${url}, ${start}, ${end}\n`;
             }
 
@@ -187,52 +183,113 @@
                 headers: {
                     'Content-Type': 'text/plain'
                 },
-                body: textData 
+                body: textData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                alert("add success!");
-                document.getElementById('url-items').innerHTML = '';
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Đã xảy ra lỗi khi gửi dữ liệu!');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert("add success!");
+                    document.getElementById('url-items').innerHTML = '';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending data!');
+                });
         }
 
 
-        function toggleEnableDisable(isEnable) {
+        // window.onload = function() {
+        //     let isEnable = localStorage.getItem('isEnable');
+        //     if (isEnable === null) {
+        //         isEnable = 'false';
+        //         localStorage.setItem('isEnable', isEnable);
+        //     }
+        //     //toggleEnableDisable(isEnable === 'true');
+        // };
+
+        // function toggleEnableDisable(isEnable) {
+        //     const enableBtn = document.getElementById('enableBtn');
+        //     const disableBtn = document.getElementById('disableBtn');
+
+        //     if (isEnable) {
+        //         enableBtn.disabled = true;
+        //         disableBtn.disabled = false;
+
+        //         fetch('/run-app', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({ action: 'start' })
+        //         })
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             console.log(data);
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        //     } else {    
+        //         enableBtn.disabled = false;
+        //         disableBtn.disabled = true;     
+
+        //         fetch('/stop-app', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({ action: 'stop' })
+        //         })
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             console.log(data);
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        //     }
+
+        //     console.log("Enable button: ", enableBtn.disabled);
+        //     console.log("Disable button: ", disableBtn.disabled);
+        //     localStorage.setItem('isEnable', isEnable);
+        //     // console.log(isEnable);
+        // }
+
+
+
+        // Khi trang được tải
+        window.onload = function () {
+            let isEnable = localStorage.getItem('isEnable');
+            if (isEnable === null) {
+                isEnable = 'false';
+                localStorage.setItem('isEnable', isEnable);
+            }
+            toggleButtonState(isEnable === 'true');
+        };
+
+        // Hàm thay đổi trạng thái của các nút (Enable / Disable)
+        function toggleButtonState(isEnable) {
             const enableBtn = document.getElementById('enableBtn');
             const disableBtn = document.getElementById('disableBtn');
-            
+
             if (isEnable) {
                 enableBtn.disabled = true;
                 disableBtn.disabled = false;
-                fetch('/run-app', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: 'start' })
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
             } else {
                 enableBtn.disabled = false;
                 disableBtn.disabled = true;
-                fetch('/stop-app', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: 'start' })
-                })
+            }
+        }
+
+        function sendAppRequest(action) {
+            const url = action === 'start' ? '/run-app' : '/stop-app';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: action })
+            })
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
@@ -240,12 +297,25 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
-            }
-
-            console.log("Enable button: ", enableBtn.disabled);
-            console.log("Disable button: ", disableBtn.disabled);
-            localStorage.setItem('isEnable', isEnable);
         }
+
+
+        function enableApp() {
+            sendAppRequest('start');
+            localStorage.setItem('isEnable', 'true');
+            toggleButtonState(true);
+        }
+
+        function disableApp() {
+            sendAppRequest('stop');
+            localStorage.setItem('isEnable', 'false');
+            toggleButtonState(false);
+        }
+
+        // Gắn sự kiện cho nút
+        document.getElementById('enableBtn').onclick = enableApp;
+        document.getElementById('disableBtn').onclick = disableApp;
+
 
     </script>
 </body>

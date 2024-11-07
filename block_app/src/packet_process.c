@@ -31,21 +31,27 @@
 #define RULE_OUTPUT_SPORT "iptables -I OUTPUT 1 -p udp --sport 53 -j NFQUEUE --queue-num 0"
 #define RULE_OUTPUT_DPORT "iptables -I OUTPUT 1 -p udp --dport 53 -j NFQUEUE --queue-num 0"
 
-#define RULE_DELETE_FORWARD_SPORT "iptables -D FORWARD -j NFQUEUE --queue-num 0"
-#define RULE_FORWARD_SPORT "iptables -I FORWARD 1 -j NFQUEUE --queue-num 0"
-
 
 #define FILE_DATA "../../block_app/data/data.txt"
+
+
+
+#define RULE_CREATE_CHAIN "iptables -N RESOLVE_CHAIN"
+#define RULE_DELETE_CHAIN "iptables -F RESOLVE_CHAIN && iptables -D INPUT -j RESOLVE_CHAIN && iptables -D OUTPUT -j RESOLVE_CHAIN && iptables -X RESOLVE_CHAIN"
+#define CHECK_NAME_CHAIN "iptables -L RESOLVE_CHAIN >/dev/null 2>&1"
+
+#define RULE_ADD_TO_INPUT "iptables -I INPUT -j RESOLVE_CHAIN"
+#define RULE_ADD_TO_OUTPUT "iptables -I OUTPUT -j RESOLVE_CHAIN"
+
+// Các quy tắc thêm vào chain MY_CHAIN
+#define RULE_ADD_DNS_SPORT "iptables -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
+#define RULE_ADD_DNS_DPORT "iptables -A RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0"
 
 
 void cleanup()
 {
     LOG(LOG_LVL_ERROR, "test_cleanup: %s, %s, %d\n", __FILE__, __func__, __LINE__);
-    //system(RULE_DELETE_FORWARD_SPORT);
-    system(RULE_DELETE_INPUT_SPORT);
-    system(RULE_DELETE_INPUT_DPORT);
-    system(RULE_DELETE_OUTPUT_SPORT);
-    system(RULE_DELETE_OUTPUT_DPORT);
+    system(RULE_DELETE_CHAIN);
     exit(0);
 }
 
@@ -107,18 +113,28 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
 
 void add_rules_iptables()
 {
+    if (system(CHECK_NAME_CHAIN) != 0) {
+        system(RULE_CREATE_CHAIN);
+    }
+    if (system("iptables -C INPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
+        system(RULE_ADD_TO_INPUT);
+    }
+    if (system("iptables -C OUTPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
+        system(RULE_ADD_TO_OUTPUT);
+    }
+    if (system("iptables -C RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
+        system(RULE_ADD_DNS_SPORT);
+    }
+    if (system("iptables -C RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
+        system(RULE_ADD_DNS_DPORT);
+    }
     LOG(LOG_LVL_DEBUG, "test_rules_iptables: %s, %s, %d\n", __FILE__, __func__, __LINE__);
-    //system(RULE_FORWARD_SPORT);
-    system(RULE_INPUT_SPORT);
-    system(RULE_INPUT_DPORT);
-    system(RULE_OUTPUT_SPORT);
-    system(RULE_OUTPUT_DPORT);
 }
+
 
 void start_packet_capture()
 {
     add_rules_iptables();
-    //clear_file_to_start();
     struct nfq_handle *h;
     struct nfq_q_handle *qh;
     int fd;
@@ -140,9 +156,17 @@ void start_packet_capture()
         fprintf(stderr, "error during nfq_bind_pf()\n");
         exit(1);
     }
+
+    // extra code
+
+    // if (qh != NULL) {
+    //     nfq_destroy_queue(qh);
+    //     qh = NULL;
+    // }
+    // end extra
     qh = nfq_create_queue(h, 0, &cb, NULL);
     if (!qh)
-    {
+    {   
         fprintf(stderr, "error during nfq_create_queue()\n");
         exit(1);
     }

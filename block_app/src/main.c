@@ -59,7 +59,6 @@ void app2(){
 
 // // Hàm cho app 1
 int main(int argc, char *argv[]) {
-    //app1
     LOG(LOG_LVL_ERROR, "testapp1_2: %s, %s, %d\n", __FILE__, __func__, __LINE__);
     signal(SIGINT, cleanup);
     clear_file_to_run(FILE_DATA);
