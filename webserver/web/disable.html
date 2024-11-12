@@ -257,7 +257,6 @@
 
 
 
-        // Khi trang được tải
         window.onload = function () {
             let isEnable = localStorage.getItem('isEnable');
             if (isEnable === null) {
@@ -267,7 +266,6 @@
             toggleButtonState(isEnable === 'true');
         };
 
-        // Hàm thay đổi trạng thái của các nút (Enable / Disable)
         function toggleButtonState(isEnable) {
             const enableBtn = document.getElementById('enableBtn');
             const disableBtn = document.getElementById('disableBtn');
@@ -311,8 +309,6 @@
             localStorage.setItem('isEnable', 'false');
             toggleButtonState(false);
         }
-
-        // Gắn sự kiện cho nút
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
 

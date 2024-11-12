@@ -113,6 +113,16 @@ void add_ipset_to_chain(const char *ipset_name)
     }
 }
 
+void delete_ipset_to_chain(const char *ipset_name) {
+    snprintf(command, sizeof(command), "iptables -C BLOCK_IP_CHAIN -m set --match-set %s src -j DROP 2>/dev/null", ipset_name);
+    
+    if (system(command) == 0) {
+        snprintf(command, sizeof(command), "iptables -D BLOCK_IP_CHAIN -m set --match-set %s src -j DROP", ipset_name);
+        system(command);
+        printf("Removed ipset %s from BLOCK_IP_CHAIN with DROP action.\n", ipset_name);
+    }
+}
+
 void add_ip_to_ipset(const char *ipset_name, const char *ip)
 {
     snprintf(command, sizeof(command), IPSET_TEST_RULE, ipset_name, ip);
@@ -180,6 +190,7 @@ void get_list()
             {
                 snprintf(command, sizeof(command), IPSET_DELETE_RULE, list[i].url, start_block_time);
                 system(command);
+                //delete_ipset_to_chain(ipset_name);
             }
         }
         else if(local_time >= start_block_time && local_time <= end_block_time){
@@ -193,6 +204,7 @@ void get_list()
             {
                 snprintf(command, sizeof(command), IPSET_DELETE_RULE, list[i].url, start_block_time);
                 system(command);
+                delete_ipset_to_chain(ipset_name);
             }
         }
         // end extra
@@ -268,6 +280,14 @@ void run()
 {
     if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
+    }
+    if (system("iptables -w -C INPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+        system("iptables -w -A INPUT -j BLOCK_IP_CHAIN");
+        printf("Added BLOCK_IP_CHAIN to INPUT chain.\n");
+    }
+    if (system("iptables -w -C OUTPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+        system("iptables -w -A OUTPUT -j BLOCK_IP_CHAIN");
+        printf("Added BLOCK_IP_CHAIN to OUTPUT chain.\n");
     }
     printf_to_file(IP_TXT_PATH);
     get_list();

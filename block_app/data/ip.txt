@@ -1,3 +1,2 @@
-dantri.com.vn,14.225.2.13,Monday,10:00,Friday,23:59
-dantri.com.vn,14.225.2.12,Monday,10:00,Friday,23:59
-thanhnien.vn,123.30.151.89,Monday,10:10,Thursday,23:11
+dantri.com.vn,14.225.2.12,Monday,11:11,Thursday,11:11
+dantri.com.vn,14.225.2.13,Monday,11:11,Thursday,11:11
