@@ -43,7 +43,7 @@
 #define RULE_ADD_TO_INPUT "iptables -I INPUT -j RESOLVE_CHAIN"
 #define RULE_ADD_TO_OUTPUT "iptables -I OUTPUT -j RESOLVE_CHAIN"
 
-// Các quy tắc thêm vào chain MY_CHAIN
+// Các quy tắc thêm vào chain
 #define RULE_ADD_DNS_SPORT "iptables -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
 #define RULE_ADD_DNS_DPORT "iptables -A RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0"
 

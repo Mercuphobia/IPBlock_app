@@ -129,5 +129,15 @@ void printf_time_to_file(const char *file_name){
 }
 
 
+void clear_file_to_run(const char *filename) {
+    FILE *check_file = fopen(filename, "w");
+    if (check_file == NULL) {
+        perror("Unable to open file");
+        return;
+    }
+    fclose(check_file);
+}
+
+
 
 

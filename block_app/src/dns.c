@@ -276,6 +276,7 @@ void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_pay
             for(int i=0;i<num_struct;i++){
                 if (strcmp((char*)list[i].url, domain_name) == 0){
                     if (!is_recorded(domain_name, ip_str)) {
+                        printf_time_to_file(FILE_DATA);
                         fprintf(file, "Name: %s\n", domain_name);
                         fprintf(file, "IPv4 Address: %s\n", ip_str);
                         fprintf(file, "--------------------------------\n");
