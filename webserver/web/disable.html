@@ -38,6 +38,14 @@
             background-color: #cccccc;
             cursor: not-allowed;
         }
+
+        .json-list-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 
@@ -124,6 +132,17 @@
             </div>
         </div>
     </section>
+    <section>
+        <div class="container custom">
+            <div class="row">
+                <div id="file-content" class="mt-4">
+                    <h4>LIST BLOCK WEB:</h4>
+                    <pre id="file-data"></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <script>
 
@@ -158,104 +177,6 @@
             urlItem.remove();
         }
 
-        function confirm() {
-            const urlItems = document.getElementById('url-items').children;
-            if (urlItems.length === 0) {
-                alert('Không có URL nào để xác nhận!');
-                return;
-            }
-            let textData = '';
-            for (let i = 0; i < urlItems.length; i++) {
-                const urlItemText = urlItems[i].querySelector('span').textContent;
-                const urlItem = urlItemText.split(', ');
-
-                const url = urlItem[0].split(': ')[1];
-                const start = urlItem[1].split(': ')[1];
-                const end = urlItem[2].split(': ')[1];
-
-                textData += `${url}, ${start}, ${end}\n`;
-            }
-
-            textData = textData.trim();
-
-            fetch('/save-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: textData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    alert("add success!");
-                    document.getElementById('url-items').innerHTML = '';
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('An error occurred while sending data!');
-                });
-        }
-
-
-        // window.onload = function() {
-        //     let isEnable = localStorage.getItem('isEnable');
-        //     if (isEnable === null) {
-        //         isEnable = 'false';
-        //         localStorage.setItem('isEnable', isEnable);
-        //     }
-        //     //toggleEnableDisable(isEnable === 'true');
-        // };
-
-        // function toggleEnableDisable(isEnable) {
-        //     const enableBtn = document.getElementById('enableBtn');
-        //     const disableBtn = document.getElementById('disableBtn');
-
-        //     if (isEnable) {
-        //         enableBtn.disabled = true;
-        //         disableBtn.disabled = false;
-
-        //         fetch('/run-app', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({ action: 'start' })
-        //         })
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             console.log(data);
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //         });
-        //     } else {    
-        //         enableBtn.disabled = false;
-        //         disableBtn.disabled = true;     
-
-        //         fetch('/stop-app', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({ action: 'stop' })
-        //         })
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             console.log(data);
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //         });
-        //     }
-
-        //     console.log("Enable button: ", enableBtn.disabled);
-        //     console.log("Disable button: ", disableBtn.disabled);
-        //     localStorage.setItem('isEnable', isEnable);
-        //     // console.log(isEnable);
-        // }
-
-
 
         window.onload = function () {
             let isEnable = localStorage.getItem('isEnable');
@@ -264,7 +185,39 @@
                 localStorage.setItem('isEnable', isEnable);
             }
             toggleButtonState(isEnable === 'true');
+            loadFileData();
         };
+
+
+        function loadFileData() {
+            fetch('/load-data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    //document.getElementById('file-data').textContent = data;
+                    //console.log(data);
+
+                    const jsonData = JSON.parse(data);
+                    const fileDataContainer = document.getElementById('file-data');
+                    fileDataContainer.innerHTML = ''; // Xóa nội dung trước đó
+
+                    jsonData.forEach((item, index) => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'json-list-item d-flex justify-content-between align-items-center mb-2';
+                        itemElement.innerHTML = `
+                        <span>URL: ${item.url}, Start: ${item.start_day} ${item.start_time}, End: ${item.end_day} ${item.end_time}</span>`;
+                        fileDataContainer.appendChild(itemElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading file:', error);
+                    document.getElementById('file-data').textContent = 'Failed to load file data.';
+                });
+        }
 
         function toggleButtonState(isEnable) {
             const enableBtn = document.getElementById('enableBtn');
@@ -311,6 +264,46 @@
         }
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
+
+
+        function confirm() {
+            const urlItems = document.getElementById('url-items').children;
+            if (urlItems.length === 0) {
+                alert('Không có URL nào để xác nhận!');
+                return;
+            }
+            let textData = '';
+            for (let i = 0; i < urlItems.length; i++) {
+                const urlItemText = urlItems[i].querySelector('span').textContent;
+                const urlItem = urlItemText.split(', ');
+
+                const url = urlItem[0].split(': ')[1];
+                const start = urlItem[1].split(': ')[1];
+                const end = urlItem[2].split(': ')[1];
+
+                textData += `${url}, ${start}, ${end}\n`;
+            }
+
+            textData = textData.trim();
+
+            fetch('/save-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: textData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert("add success!");
+                    document.getElementById('url-items').innerHTML = '';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending data!');
+                });
+        }
 
 
     </script>
