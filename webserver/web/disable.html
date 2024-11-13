@@ -222,6 +222,7 @@
             const enableBtn = document.getElementById('enableBtn');
             const disableBtn = document.getElementById('disableBtn');
 
+
             if (isEnable) {
                 enableBtn.disabled = true;
                 disableBtn.disabled = false;
@@ -229,6 +230,26 @@
                 enableBtn.disabled = false;
                 disableBtn.disabled = true;
             }
+
+            // if (isEnable) {
+            //     // enableBtn.disabled = true;
+            //     // disableBtn.disabled = false;
+            //     enableBtn.disabled = true;
+            //     disableBtn.disabled = true;
+            //     setTimeout(() => {
+            //         enableBtn.disabled = true;
+            //         disableBtn.disabled = false;
+            //     }, 3000);
+            // } else {
+            //     // enableBtn.disabled = false;
+            //     // disableBtn.disabled = true;
+            //     enableBtn.disabled = true;
+            //     disableBtn.disabled = true;
+            //     setTimeout(() => {
+            //         enableBtn.disabled = false;
+            //         disableBtn.disabled = true;
+            //     }, 3000);
+            // }
         }
 
         function sendAppRequest(action) {
@@ -248,19 +269,6 @@
                     console.error('Error:', error);
                 });
         }
-
-        // function enableApp() {
-        //     sendAppRequest('start');
-        //     localStorage.setItem('isEnable', 'true');
-        //     toggleButtonState(true);
-        // }
-
-        // function disableApp() {
-        //     sendAppRequest('stop');
-        //     localStorage.setItem('isEnable', 'false');
-        //     toggleButtonState(false);
-        // }
-
 
         async function enableApp() {
             try {
@@ -348,14 +356,15 @@
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
-                            alert("add success!");
+                            //alert("add success!");
                             document.getElementById('url-items').innerHTML = '';
                         })
                         .catch((error) => {
                             console.error('Error:', error);
                             alert('An error occurred while sending data!');
                         });
-                    
+
+                    alert("please enable again!");
 
                 }
             }

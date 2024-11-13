@@ -29,52 +29,6 @@
 #define FILE_DATA "../../block_app/data/data.txt"
 
 
-//block_app
-
-// int main(int argc, char *argv[]) {
-//     if(argc > 1){
-//         parsers_option(argc, argv);
-//     }
-//     else {
-//         signal(SIGINT, delete_iptable_rules_chain_and_ipset);
-//         while(1){
-//             clear_file_to_run(BLOCK_WEB);
-//             transfer_data(SRC_WEB_BLOCK_PATH,DES_WEB_BLOCK_PATH);
-//             clear_file_to_run(IP_FILE);
-//             clear_file_to_run(CHECK_FILE);
-//             run();
-//             sleep(1);
-//         }
-//     }
-// }
-
-
-// // // Hàm cho app 1
-// int main(int argc, char *argv[]) {
-//     LOG(LOG_LVL_ERROR, "testapp1_2: %s, %s, %d\n", __FILE__, __func__, __LINE__);
-//     signal(SIGINT, cleanup);
-//     clear_file_to_run(FILE_DATA);
-//     clear_file_to_run(BLOCK_WEB);
-//     transfer_data(SRC_WEB_BLOCK_PATH,DES_WEB_BLOCK_PATH);
-//     start_packet_capture();
-// }
-
-
-// // // Hàm cho app 2
-// int main(int argc, char *argv[]) {
-//     //signal(SIGINT,delete_iptable_rules_chain_and_ipset);
-//     while (1) {
-//         clear_file_to_run(BLOCK_WEB);
-//         transfer_data(SRC_WEB_BLOCK_PATH, DES_WEB_BLOCK_PATH);
-//         clear_file_to_run(IP_FILE);
-//         clear_file_to_run(CHECK_FILE);
-//         run();
-//         sleep(1);
-//     }
-// }
-
-
-
 
 pthread_t thread1, thread2;
 volatile sig_atomic_t sigint_received = 0;
@@ -89,12 +43,10 @@ void* app1(void* arg) {
 void* app2(void* arg) {
     //signal(SIGINT,delete_iptable_rules_chain_and_ipset);
     while (1) {
-        // clear_file_to_run(BLOCK_WEB);
-        //transfer_data(SRC_WEB_BLOCK_PATH, DES_WEB_BLOCK_PATH);
         clear_file_to_run(IP_FILE);
         clear_file_to_run(CHECK_FILE);
         run();
-        sleep(1);
+        sleep(2);
     }
 }
 
