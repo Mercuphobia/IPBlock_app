@@ -8,18 +8,18 @@
 #include "parsers_data.h"
 
 // run board//
-// #define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
-// #define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
-// #define IPSET_ADD "/userfs/bin/ipset add %s %s"
-// #define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld"
-// #define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
+#define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
+#define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
+#define IPSET_ADD "/userfs/bin/ipset add %s %s"
+#define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld > /dev/null 2>&1"
+#define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
 
 // run vmware//
-#define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
-#define IPSET_CREATE "ipset create %s hash:ip"
-#define IPSET_ADD "ipset add %s %s"
-#define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
-#define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
+// #define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
+// #define IPSET_CREATE "ipset create %s hash:ip"
+// #define IPSET_ADD "ipset add %s %s"
+// #define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
+// #define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
 
 #define IP_TABLES_ADD_INPUT "iptables -I INPUT -m set --match-set %s_%ld src -j DROP"
 #define IP_TABLES_ADD_OUTPUT "iptables -I OUTPUT -m set --match-set %s_%ld src -j DROP"
@@ -164,10 +164,6 @@ void get_list()
     }
     for (int i = 0; i < num_struct; i++)
     {
-        //char ipset_name[256];
-        //snprintf(ipset_name, sizeof(ipset_name), "%s_%ld", list[i].url, convert_to_seconds(list[i].start_day,list[i].start_time));
-        //create_ipset(ipset_name);
-        //add_ip_to_ipset(ipset_name, list[i].ip);
         char line[256];
         snprintf(line, sizeof(line), "%s, %ld, %ld\n",
                  list[i].url,
@@ -281,12 +277,12 @@ void run()
     if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
     }
-    if (system("iptables -w -C INPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
-        system("iptables -w -A INPUT -j BLOCK_IP_CHAIN");
+    if (system("iptables -w 1 -C INPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+        system("iptables -w 1 -A INPUT -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to INPUT chain.\n");
     }
-    if (system("iptables -w -C OUTPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
-        system("iptables -w -A OUTPUT -j BLOCK_IP_CHAIN");
+    if (system("iptables -w 1 -C OUTPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+        system("iptables -w 1 -A OUTPUT -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to OUTPUT chain.\n");
     }
     printf_to_file(IP_TXT_PATH);

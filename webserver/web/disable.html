@@ -154,7 +154,7 @@
             const endTime = document.getElementById('end-time').value;
 
             if (!url || !startTime || !endTime) {
-                alert('Vui lòng nhập đầy đủ thông tin!');
+                alert('Please enter complete information!');
                 return;
             }
 
@@ -198,12 +198,11 @@
                     return response.text();
                 })
                 .then(data => {
-                    //document.getElementById('file-data').textContent = data;
                     //console.log(data);
 
                     const jsonData = JSON.parse(data);
                     const fileDataContainer = document.getElementById('file-data');
-                    fileDataContainer.innerHTML = ''; // Xóa nội dung trước đó
+                    fileDataContainer.innerHTML = '';
 
                     jsonData.forEach((item, index) => {
                         const itemElement = document.createElement('div');
@@ -250,60 +249,119 @@
                 });
         }
 
+        // function enableApp() {
+        //     sendAppRequest('start');
+        //     localStorage.setItem('isEnable', 'true');
+        //     toggleButtonState(true);
+        // }
 
-        function enableApp() {
-            sendAppRequest('start');
-            localStorage.setItem('isEnable', 'true');
-            toggleButtonState(true);
+        // function disableApp() {
+        //     sendAppRequest('stop');
+        //     localStorage.setItem('isEnable', 'false');
+        //     toggleButtonState(false);
+        // }
+
+
+        async function enableApp() {
+            try {
+                await sendAppRequest('start');
+                localStorage.setItem('isEnable', 'true');
+                toggleButtonState(true);
+                console.log("App started and button state updated.");
+            } catch (error) {
+                console.error("Error during enabling app:", error);
+            }
         }
 
-        function disableApp() {
-            sendAppRequest('stop');
-            localStorage.setItem('isEnable', 'false');
-            toggleButtonState(false);
+        async function disableApp() {
+            try {
+                await sendAppRequest('stop');
+                localStorage.setItem('isEnable', 'false');
+                toggleButtonState(false);
+                console.log("App stopped and button state updated.");
+            } catch (error) {
+                console.error("Error during disabling app:", error);
+            }
         }
+
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
 
 
         function confirm() {
-            const urlItems = document.getElementById('url-items').children;
-            if (urlItems.length === 0) {
-                alert('Không có URL nào để xác nhận!');
-                return;
+
+            var enable_btn = document.getElementById('enableBtn');
+            var disable_btn = document.getElementById('disableBtn');
+
+            var is_enable_active = !enable_btn.disabled;
+            var is_disable_active = !disable_btn.disabled;
+
+            console.log("Enable button active:", is_enable_active);
+            console.log("Disable button active:", is_disable_active);
+
+            if (is_enable_active == true && is_disable_active == false) {
+                const urlItems = document.getElementById('url-items').children;
+                if (urlItems.length === 0) {
+                    alert('You haven\'t added any websites to block');
+                    return;
+                }
+                else {
+                    alert("You must enable the feature first");
+                }
+                location.reload();
             }
-            let textData = '';
-            for (let i = 0; i < urlItems.length; i++) {
-                const urlItemText = urlItems[i].querySelector('span').textContent;
-                const urlItem = urlItemText.split(', ');
+            if (is_enable_active == false && is_disable_active == true) {
+                const urlItems = document.getElementById('url-items').children;
+                if (urlItems.length === 0) {
+                    alert('You haven\'t added any websites to block');
+                    return;
+                }
+                else {
+                    disableApp();
 
-                const url = urlItem[0].split(': ')[1];
-                const start = urlItem[1].split(': ')[1];
-                const end = urlItem[2].split(': ')[1];
+                    fetch('/clear-data')
+                        .then(function (response) {
+                            return response.json;
+                        })
 
-                textData += `${url}, ${start}, ${end}\n`;
+                    let textData = '';
+                    for (let i = 0; i < urlItems.length; i++) {
+                        const urlItemText = urlItems[i].querySelector('span').textContent;
+                        const urlItem = urlItemText.split(', ');
+
+                        const url = urlItem[0].split(': ')[1];
+                        const start = urlItem[1].split(': ')[1];
+                        const end = urlItem[2].split(': ')[1];
+
+                        textData += `${url}, ${start}, ${end}\n`;
+                    }
+
+                    textData = textData.trim();
+
+                    fetch('/save-data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain'
+                        },
+                        body: textData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            alert("add success!");
+                            document.getElementById('url-items').innerHTML = '';
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert('An error occurred while sending data!');
+                        });
+                    
+
+                }
             }
 
-            textData = textData.trim();
-
-            fetch('/save-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: textData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    alert("add success!");
-                    document.getElementById('url-items').innerHTML = '';
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('An error occurred while sending data!');
-                });
         }
+
 
 
     </script>

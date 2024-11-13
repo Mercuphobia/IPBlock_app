@@ -36,16 +36,16 @@
 
 
 
-#define RULE_CREATE_CHAIN "iptables -N RESOLVE_CHAIN"
+#define RULE_CREATE_CHAIN "iptables -w 1 -N RESOLVE_CHAIN"
 #define RULE_DELETE_CHAIN "iptables -F RESOLVE_CHAIN && iptables -D INPUT -j RESOLVE_CHAIN && iptables -D OUTPUT -j RESOLVE_CHAIN && iptables -X RESOLVE_CHAIN"
-#define CHECK_NAME_CHAIN "iptables -L RESOLVE_CHAIN >/dev/null 2>&1"
+#define CHECK_NAME_CHAIN "iptables -w 1 -L RESOLVE_CHAIN >/dev/null 2>&1"
 
 #define RULE_ADD_TO_INPUT "iptables -I INPUT -j RESOLVE_CHAIN"
 #define RULE_ADD_TO_OUTPUT "iptables -I OUTPUT -j RESOLVE_CHAIN"
 
 // Các quy tắc thêm vào chain
-#define RULE_ADD_DNS_SPORT "iptables -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
-#define RULE_ADD_DNS_DPORT "iptables -A RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0"
+#define RULE_ADD_DNS_SPORT "iptables -w 1 -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
+#define RULE_ADD_DNS_DPORT "iptables -w 1 -A RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0"
 
 
 void cleanup()
@@ -116,16 +116,16 @@ void add_rules_iptables()
     if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
     }
-    if (system("iptables -C INPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
+    if (system("iptables -w 1 -C INPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
         system(RULE_ADD_TO_INPUT);
     }
-    if (system("iptables -C OUTPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
+    if (system("iptables -w 1 -C OUTPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
         system(RULE_ADD_TO_OUTPUT);
     }
-    if (system("iptables -C RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
+    if (system("iptables -w 1 -C RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
         system(RULE_ADD_DNS_SPORT);
     }
-    if (system("iptables -C RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
+    if (system("iptables -w 1 -C RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
         system(RULE_ADD_DNS_DPORT);
     }
     LOG(LOG_LVL_DEBUG, "test_rules_iptables: %s, %s, %d\n", __FILE__, __func__, __LINE__);

@@ -1,4 +1,1 @@
-dantri.com.vn, Monday 11:11, Friday 11:11
-liquipedia.net, Monday 11:11, Friday 11:11
-youtube.com, Monday 11:11, Friday 11:11
-test1, Monday 11:11, Monday 11:11
+liquipedia.net, Monday 11:11, Saturday 11:11
