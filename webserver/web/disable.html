@@ -7,8 +7,8 @@
     <title>Network Topology</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./libs/bootstrap.min.css">
+    <link rel="stylesheet" href="./libs/disable.css">
     <script src="./libs/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="./css/disable.css">
     <style>
         /* Custom styles for the Enable and Disable buttons */
         .btn-enable {
@@ -131,8 +131,8 @@
                 </div>
             </div>
         </div>
-    </section>
-    <section>
+
+        <!-- list block -->
         <div class="container custom">
             <div class="row">
                 <div id="file-content" class="mt-4">
@@ -142,6 +142,16 @@
             </div>
         </div>
     </section>
+    <section>
+        <!-- Overlay -->
+        <div id="overlay" style="display: none;" class="overlay">
+            <div class="message-box">
+                <h5 id="loadingMessage">Please wait a moment !!!</h5>
+            </div>
+        </div>
+    </section>
+
+
 
 
     <script>
@@ -250,12 +260,23 @@
                 });
         }
 
+        // extra
+        var over_state = document.getElementById('overlay');
         async function enableApp() {
             try {
                 await sendAppRequest('start');
                 localStorage.setItem('isEnable', 'true');
                 toggleButtonState(true);
                 console.log("App started and button state updated.");
+                
+                // extra
+                over_state.style.display = 'flex'; 
+                setTimeout(function() {
+                    over_state.style.display = 'none';
+                    console.log("Overlay hidden after 10 seconds.");
+                }, 10000);
+
+
             } catch (error) {
                 console.error("Error during enabling app:", error);
             }
@@ -267,6 +288,14 @@
                 localStorage.setItem('isEnable', 'false');
                 toggleButtonState(false);
                 console.log("App stopped and button state updated.");
+
+                // extra
+                over_state.style.display = 'flex'; 
+                setTimeout(function() {
+                    over_state.style.display = 'none';
+                    console.log("Overlay hidden after 10 seconds.");
+                }, 10000);
+
             } catch (error) {
                 console.error("Error during disabling app:", error);
             }
@@ -275,18 +304,13 @@
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
 
-
         function confirm() {
-
             var enable_btn = document.getElementById('enableBtn');
             var disable_btn = document.getElementById('disableBtn');
-
             var is_enable_active = !enable_btn.disabled;
             var is_disable_active = !disable_btn.disabled;
-
             console.log("Enable button active:", is_enable_active);
             console.log("Disable button active:", is_disable_active);
-
             if (is_enable_active == true && is_disable_active == false) {
                 const urlItems = document.getElementById('url-items').children;
                 if (urlItems.length === 0) {
@@ -337,13 +361,15 @@
                         .then(data => {
                             console.log(data);
                             document.getElementById('url-items').innerHTML = '';
+                            // extra code
+                            loadFileData();
                         })
                         .catch((error) => {
                             console.error('Error:', error);
                             alert('An error occurred while sending data!');
                         });
 
-                    alert("he thong se reload lai!");
+                    alert("Saving the data file is in progress, please run again!");
                 }
             }
         }

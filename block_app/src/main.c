@@ -54,7 +54,7 @@ void sigint_handler(int sig) {
     sigint_received = 1;
     cleanup();
     sleep(2);
-    //delete_iptable_rules_chain_and_ipset();
+    delete_iptable_rules_chain_and_ipset();
     exit(0);
 }
 
