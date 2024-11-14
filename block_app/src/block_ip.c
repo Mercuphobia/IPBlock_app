@@ -103,9 +103,20 @@ void create_ipset(const char *ipset_name)
     }
 }
 
+// void add_ipset_to_chain(const char *ipset_name)
+// {
+//     snprintf(command, sizeof(command), "iptables -C BLOCK_IP_CHAIN -m set --match-set %s src -j DROP 2>/dev/null", ipset_name);
+//     if (system(command) != 0) {
+//         snprintf(command, sizeof(command), "iptables -A BLOCK_IP_CHAIN -m set --match-set %s src -j DROP", ipset_name);
+//         system(command);
+//         printf("Added ipset %s to BLOCK_IP_CHAIN with DROP action.\n", ipset_name);
+//     }
+// }
+
 void add_ipset_to_chain(const char *ipset_name)
 {
-    snprintf(command, sizeof(command), "iptables -C BLOCK_IP_CHAIN -m set --match-set %s src -j DROP 2>/dev/null", ipset_name);
+    char command[256];
+    snprintf(command, sizeof(command), "iptables -L INPUT | grep -q BLOCK_IP_CHAIN");
     if (system(command) != 0) {
         snprintf(command, sizeof(command), "iptables -A BLOCK_IP_CHAIN -m set --match-set %s src -j DROP", ipset_name);
         system(command);
@@ -277,11 +288,11 @@ void run()
     if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
     }
-    if (system("iptables -C INPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+    if (system("iptables -L INPUT | grep -q BLOCK_IP_CHAIN") != 0) {
         system("iptables -A INPUT -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to INPUT chain.\n");
     }
-    if (system("iptables -C OUTPUT -j BLOCK_IP_CHAIN 2>/dev/null") != 0) {
+    if (system("iptables -L OUTPUT | grep -q BLOCK_IP_CHAIN") != 0) {
         system("iptables -A OUTPUT -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to OUTPUT chain.\n");
     }

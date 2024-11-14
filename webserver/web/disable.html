@@ -230,26 +230,6 @@
                 enableBtn.disabled = false;
                 disableBtn.disabled = true;
             }
-
-            // if (isEnable) {
-            //     // enableBtn.disabled = true;
-            //     // disableBtn.disabled = false;
-            //     enableBtn.disabled = true;
-            //     disableBtn.disabled = true;
-            //     setTimeout(() => {
-            //         enableBtn.disabled = true;
-            //         disableBtn.disabled = false;
-            //     }, 3000);
-            // } else {
-            //     // enableBtn.disabled = false;
-            //     // disableBtn.disabled = true;
-            //     enableBtn.disabled = true;
-            //     disableBtn.disabled = true;
-            //     setTimeout(() => {
-            //         enableBtn.disabled = false;
-            //         disableBtn.disabled = true;
-            //     }, 3000);
-            // }
         }
 
         function sendAppRequest(action) {
@@ -356,7 +336,6 @@
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
-                            //alert("add success!");
                             document.getElementById('url-items').innerHTML = '';
                         })
                         .catch((error) => {
@@ -364,14 +343,10 @@
                             alert('An error occurred while sending data!');
                         });
 
-                    alert("please enable again!");
-
+                    alert("he thong se reload lai!");
                 }
             }
-
         }
-
-
 
     </script>
 </body>
