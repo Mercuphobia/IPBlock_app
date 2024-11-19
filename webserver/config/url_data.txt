@@ -1,3 +1,2 @@
-dantri.com.vn, Monday 11:11, Thursday 01:21
-thanhnien.vn, Monday 11:11, Thursday 01:21
-thanhnien.vn, Thursday 01:22, Thursday 01:23
+dantri.com.vn, Monday 11:11, Wednesday 11:11
+thanhnien.vn, Monday 11:11, Wednesday 11:11
