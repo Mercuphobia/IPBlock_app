@@ -1,0 +1,76 @@
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.197.206
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.197.238
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.46
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.71.206
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.71.238
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.110
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.66.46
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.238
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.199.78
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.142
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.174
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.198.206
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.199.206
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.199.238
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.71.142
+--------------------------------
+TIME: 00:40:51 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.71.174
+--------------------------------
+TIME: 00:41:41 DATE:20-11-2024
+Name: thanhnien.vn
+IPv4 Address: 123.30.151.89
+--------------------------------
+TIME: 00:41:46 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.76.14
+--------------------------------
+TIME: 00:41:46 DATE:20-11-2024
+Name: www.youtube.com
+IPv4 Address: 142.250.76.238
+--------------------------------

@@ -111,26 +111,6 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     return nfq_set_verdict(qh, id, NF_ACCEPT, 0, NULL);
 }
 
-// void add_rules_iptables()
-// {
-//     if (system(CHECK_NAME_CHAIN) != 0) {
-//         system(RULE_CREATE_CHAIN);
-//     }
-//     if (system("iptables -C INPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
-//         system(RULE_ADD_TO_INPUT);
-//     }
-//     if (system("iptables -C OUTPUT -j RESOLVE_CHAIN 2>/dev/null") != 0) {
-//         system(RULE_ADD_TO_OUTPUT);
-//     }
-//     if (system("iptables -C RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
-//         system(RULE_ADD_DNS_SPORT);
-//     }
-//     if (system("iptables -C RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0 2>/dev/null") != 0) {
-//         system(RULE_ADD_DNS_DPORT);
-//     }
-//     LOG(LOG_LVL_DEBUG, "test_rules_iptables: %s, %s, %d\n", __FILE__, __func__, __LINE__);
-// }
-
 
 
 void add_rules_iptables()

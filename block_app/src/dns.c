@@ -43,7 +43,6 @@ void add_record(const char *domain, const char *ip_address) {
             exit(1);
         }
     }
-    // Thêm cặp tên miền và IP mới vào mảng
     strncpy(recorded_list[recorded_count].domain, domain, sizeof(recorded_list[recorded_count].domain) - 1);
     strncpy(recorded_list[recorded_count].ip_address, ip_address, sizeof(recorded_list[recorded_count].ip_address) - 1);
     recorded_count++;
@@ -195,57 +194,6 @@ void printf_dns_answer_to_console(unsigned char *dns_answer, unsigned char* dns_
     //LOG(LOG_LVL_ERROR, "test_printf_dns_answer_to_console: %s, %s, %d\n", __FILE__, __func__, __LINE__);
 }
 
-
-// void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_payload_content, unsigned char* filename) {
-//     int answer_offset = 0;
-//     int name_length = 0;
-//     if ((dns_answer[0] & 0xC0) == 0xC0) {
-//         name_length = TWO_BYTE;
-//     } else {
-//         while (dns_answer[name_length] != 0) {
-//             name_length += dns_answer[name_length] + ONE_BYTE;
-//         }
-//         name_length += ONE_BYTE;
-//     }
-//     unsigned short type = ntohs(*(unsigned short *)(dns_answer + name_length));
-//     unsigned short class = ntohs(*(unsigned short *)(dns_answer + name_length + TWO_BYTE));
-//     unsigned int ttl = ntohl(*(unsigned int *)(dns_answer + name_length + FOUR_BYTE));
-//     unsigned short data_len = ntohs(*(unsigned short *)(dns_answer + name_length + EIGHT_BYTE));
-//     FILE *file = fopen(filename, "a");
-//     if (file != NULL) {
-//         if (type == 1 && data_len == 4) {
-//             struct in_addr ipv4_addr;
-//             memcpy(&ipv4_addr, dns_answer + name_length + 10, sizeof(ipv4_addr));
-//             //printf_time_to_file(FILE_DATA);
-//             // extra code 
-//             int num_struct = 0;
-//             website_block* list = read_block_web(BLOCK_WEB_TXT_PATH, &num_struct);
-//             for(int i=0;i<num_struct;i++){
-//                 if (strcmp((char*)list[i].url, get_dns_answer_name(dns_payload_content, answer_offset)) == 0){
-//                     fprintf(file, "Name: %s\n", get_dns_answer_name(dns_payload_content, answer_offset));
-//                     fprintf(file, "IPv4 Address: %s\n", inet_ntoa(ipv4_addr));
-//                     fprintf(file, "--------------------------------\n");
-//                     // printf("Name: %s\n",get_dns_answer_name(dns_payload_content,answer_offset));
-//                     // printf("IPv4 Address: %s\n", inet_ntoa(ipv4_addr));
-//                     // printf("\n");
-//                 }
-//             }
-//             // end extra code
-//             // fprintf(file, "Name: %s\n", get_dns_answer_name(dns_payload_content, answer_offset));
-//             // //fprintf(file, "Type: %u\n", type);
-//             // //fprintf(file, "Class: %u\n", class);
-//             // //fprintf(file, "TTL: %u\n", ttl);
-//             // //fprintf(file, "Data Length: %u\n", data_len);
-//             // fprintf(file, "IPv4 Address: %s\n", inet_ntoa(ipv4_addr));
-//             // fprintf(file, "--------------------------------\n");
-//         }
-//         fclose(file);
-//     } else {
-//         fprintf(stderr, "Could not open file for writing\n");
-//     }
-// }
-
-
 void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_payload_content, unsigned char* filename) {
     int answer_offset = 0;
     int name_length = 0;
@@ -269,8 +217,6 @@ void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_pay
 
             char* domain_name = get_dns_answer_name(dns_payload_content, answer_offset);
             char* ip_str = inet_ntoa(ipv4_addr);
-
-            // extra code 
             int num_struct = 0;
             website_block* list = read_block_web(BLOCK_WEB_TXT_PATH, &num_struct);
             for(int i=0;i<num_struct;i++){
@@ -280,7 +226,6 @@ void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_pay
                         fprintf(file, "Name: %s\n", domain_name);
                         fprintf(file, "IPv4 Address: %s\n", ip_str);
                         fprintf(file, "--------------------------------\n");
-
                         add_record(domain_name, ip_str);
                     }
                 }
@@ -293,7 +238,11 @@ void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_pay
     }
 }
 
-// Giải phóng bộ nhớ khi không cần nữa
+void printf_dns_answer_to_file_for_reuse(unsigned char *dns_answer, unsigned char* dns_payload_content, unsigned char* filename, unsigned char* folder){
+    
+}
+
+
 void free_recorded_list() {
     free(recorded_list);
     recorded_list = NULL;

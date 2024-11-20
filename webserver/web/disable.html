@@ -184,16 +184,24 @@
             urlItem.remove();
         }
 
-
-        window.onload = function () {
-            let isEnable = localStorage.getItem('isEnable');
-            if (isEnable === null) {
-                isEnable = 'false';
-                localStorage.setItem('isEnable', isEnable);
+        window.onload = async function () {
+            try {
+                const response = await fetch('/get-state');
+                if (!response.ok) {
+                    throw new Error('Unable to load status from server');
+                }
+                const data = await response.json();
+                const isEnable = data.state === "true";
+                console.log(data.state);
+                toggleButtonState(isEnable);
+                //localStorage.setItem('isEnable', isEnable ? 'true' : 'false');
+            } catch (error) {
+                console.error('Error loading state:', error);
             }
-            toggleButtonState(isEnable === 'true');
             loadFileData();
         };
+
+        // end extra
 
 
         function loadFileData() {
@@ -257,21 +265,19 @@
                 });
         }
 
-        // extra
         var over_state = document.getElementById('overlay');
         async function enableApp() {
             try {
                 await sendAppRequest('start');
-                localStorage.setItem('isEnable', 'true');
+                //localStorage.setItem('isEnable', 'true');
                 toggleButtonState(true);
                 console.log("App started and button state updated.");
-                
+                updateStateInFile(true);
                 over_state.style.display = 'flex'; 
                 setTimeout(function() {
                     over_state.style.display = 'none';
                     console.log("Overlay hidden after 10 seconds.");
                 }, 10000);
-
 
             } catch (error) {
                 console.error("Error during enabling app:", error);
@@ -281,11 +287,10 @@
         async function disableApp() {
             try {
                 await sendAppRequest('stop');
-                localStorage.setItem('isEnable', 'false');
+                //localStorage.setItem('isEnable', 'false');
                 toggleButtonState(false);
                 console.log("App stopped and button state updated.");
-
-                // extra
+                updateStateInFile(false);
                 over_state.style.display = 'flex'; 
                 setTimeout(function() {
                     over_state.style.display = 'none';
@@ -296,6 +301,23 @@
                 console.error("Error during disabling app:", error);
             }
         }
+        function updateStateInFile(isEnabled) {
+            fetch('/set-state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: isEnabled ? 'true' : 'false'
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("State updated in file:", data);
+            })
+            .catch(error => {
+                console.error('Error updating state in file:', error);
+            });
+        }
+
 
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
@@ -326,7 +348,6 @@
                 }
                 else {
                     disableApp();
-
                     fetch('/clear-data')
                         .then(function (response) {
                             return response.json;
@@ -343,7 +364,6 @@
 
                         textData += `${url}, ${start}, ${end}\n`;
                     }
-
                     textData = textData.trim();
 
                     fetch('/save-data', {
@@ -357,7 +377,6 @@
                         .then(data => {
                             console.log(data);
                             document.getElementById('url-items').innerHTML = '';
-                            // extra code
                             loadFileData();
                         })
                         .catch((error) => {
@@ -365,11 +384,9 @@
                             alert('An error occurred while sending data!');
                         });
 
-                    alert("Saving the data file is in progress, please run again!");
                 }
             }
         }
-
     </script>
 </body>
 

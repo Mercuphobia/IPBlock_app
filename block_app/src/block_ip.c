@@ -8,18 +8,18 @@
 #include "parsers_data.h"
 
 // run board//
-// #define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
-// #define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
-// #define IPSET_ADD "/userfs/bin/ipset add %s %s"
-// #define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld > /dev/null 2>&1"
-// #define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
+#define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
+#define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
+#define IPSET_ADD "/userfs/bin/ipset add %s %s"
+#define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld > /dev/null 2>&1"
+#define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
 
 // run vmware//
-#define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
-#define IPSET_CREATE "ipset create %s hash:ip"
-#define IPSET_ADD "ipset add %s %s"
-#define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
-#define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
+// #define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
+// #define IPSET_CREATE "ipset create %s hash:ip"
+// #define IPSET_ADD "ipset add %s %s"
+// #define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
+// #define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
 
 
 
@@ -105,15 +105,6 @@ void create_ipset(const char *ipset_name)
     }
 }
 
-// void add_ipset_to_chain(const char *ipset_name)
-// {
-//     snprintf(command, sizeof(command), "iptables -C BLOCK_IP_CHAIN -m set --match-set %s src -j DROP 2>/dev/null", ipset_name);
-//     if (system(command) != 0) {
-//         snprintf(command, sizeof(command), "iptables -A BLOCK_IP_CHAIN -m set --match-set %s src -j DROP", ipset_name);
-//         system(command);
-//         printf("Added ipset %s to BLOCK_IP_CHAIN with DROP action.\n", ipset_name);
-//     }
-// }
 
 void add_ipset_to_chain(const char *ipset_name)
 {
@@ -262,6 +253,10 @@ void run()
     if (system("iptables -L OUTPUT | grep -q BLOCK_IP_CHAIN") != 0) {
         system("iptables -A OUTPUT -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to OUTPUT chain.\n");
+    }
+    if (system("iptables -L FORWARD | grep -q BLOCK_IP_CHAIN") != 0) {
+        system("iptables -A FORWARD -j BLOCK_IP_CHAIN");
+        printf("Added BLOCK_IP_CHAIN to FORWARD chain.\n");
     }
     printf_to_file(IP_TXT_PATH);
     get_list();
