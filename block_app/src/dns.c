@@ -238,9 +238,6 @@ void printf_dns_answer_to_file(unsigned char *dns_answer, unsigned char* dns_pay
     }
 }
 
-void printf_dns_answer_to_file_for_reuse(unsigned char *dns_answer, unsigned char* dns_payload_content, unsigned char* filename, unsigned char* folder){
-    
-}
 
 
 void free_recorded_list() {

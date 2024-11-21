@@ -64,6 +64,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     {
         id = ntohl(packet_header->packet_id);
     }
+    LOG(LOG_LVL_ERROR, "testmain1: %s, %s, %d\n", __FILE__, __func__, __LINE__);
     unsigned char *packet_data;
     int ret = nfq_get_payload(nfa, &packet_data);
     if (ret >= 0)
@@ -91,6 +92,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
                     int number_of_answer = ntohs(dns->ancount);
 
                     for(int i=0;i<number_of_answer;i++){
+                        LOG(LOG_LVL_ERROR, "testmain1: %s, %s, %d\n", __FILE__, __func__, __LINE__);
                         printf_dns_answer_to_file(dns_answer, dns_payload_content,FILE_DATA);
                         int name_length = 0;
                         if ((dns_answer[0] & 0xC0) == 0xC0) {
@@ -104,6 +106,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
                         unsigned short data_len = ntohs(*(unsigned short *)(dns_answer + name_length + 8));
                         dns_answer += name_length + 10 + data_len;
                     }
+                    LOG(LOG_LVL_ERROR, "testmain1: %s, %s, %d\n", __FILE__, __func__, __LINE__);
                 }
             }
         }
