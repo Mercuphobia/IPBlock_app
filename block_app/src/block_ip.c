@@ -246,6 +246,6 @@ void run()
         printf("Added BLOCK_IP_CHAIN to FORWARD chain.\n");
     }
     check_and_print_access_pages(IP_TXT_PATH);
-    get_list();
     printf_to_file(IP_TXT_PATH);
+    get_list();
 }
