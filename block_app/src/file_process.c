@@ -128,6 +128,20 @@ void printf_time_to_file(const char *file_name){
     fclose(file);
 }
 
+void printf_time_to_file_custom(FILE *file) {
+    time_t now = time(NULL);
+    struct tm *local = localtime(&now);
+
+    if (local != NULL) {
+        fprintf(file, "TIME: %02d:%02d:%02d DATE:%02d-%02d-%04d\n",
+                local->tm_hour, local->tm_min, local->tm_sec,
+                local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
+    } else {
+        fprintf(file, "TIME: UNKNOWN DATE: UNKNOWN\n");
+    }
+}
+
+
 
 void clear_file_to_run(const char *filename) {
     FILE *check_file = fopen(filename, "w");

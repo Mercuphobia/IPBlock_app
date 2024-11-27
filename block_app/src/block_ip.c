@@ -8,18 +8,18 @@
 #include "parsers_data.h"
 
 // run board//
-#define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
-#define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
-#define IPSET_ADD "/userfs/bin/ipset add %s %s"
-#define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld > /dev/null 2>&1"
-#define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
+// #define IPSET_LIST_NO_STDOUT "/userfs/bin/ipset list %s > /dev/null 2>&1"
+// #define IPSET_CREATE "/userfs/bin/ipset create %s hash:ip"
+// #define IPSET_ADD "/userfs/bin/ipset add %s %s"
+// #define IPSET_DELETE_RULE "/userfs/bin/ipset destroy %s_%ld > /dev/null 2>&1"
+// #define IPSET_TEST_RULE "/userfs/bin/ipset test %s %s > /dev/null 2>&1"
 
 // run vmware//
-// #define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
-// #define IPSET_CREATE "ipset create %s hash:ip"
-// #define IPSET_ADD "ipset add %s %s"
-// #define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
-// #define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
+#define IPSET_LIST_NO_STDOUT "ipset list %s > /dev/null 2>&1"
+#define IPSET_CREATE "ipset create %s hash:ip"
+#define IPSET_ADD "ipset add %s %s"
+#define IPSET_DELETE_RULE "ipset destroy %s_%ld > /dev/null 2>&1"
+#define IPSET_TEST_RULE "ipset test %s %s > /dev/null 2>&1"
 
 
 
@@ -126,6 +126,7 @@ void delete_ipset_to_chain(const char *ipset_name) {
         printf("Removed ipset %s from BLOCK_IP_CHAIN with DROP action.\n", ipset_name);
     }
 }
+
 void add_ip_to_ipset(const char *ipset_name, const char *ip)
 {
     snprintf(command, sizeof(command), IPSET_TEST_RULE, ipset_name, ip);
@@ -137,26 +138,12 @@ void add_ip_to_ipset(const char *ipset_name, const char *ip)
 }
 
 
-
 int rule_iptables_exists(const char *url, long start_time)
 {
     snprintf(command, sizeof(command), "iptables -L | grep -q %s_%ld", url, start_time);
     return system(command) == 0;
 }
 
-bool is_line_in_file(FILE *file, const char *line)
-{
-    char buffer[256];
-    rewind(file);
-    while (fgets(buffer, sizeof(buffer), file) != NULL)
-    {
-        if (strcmp(buffer, line) == 0)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 void get_list()
 {
@@ -206,7 +193,7 @@ void get_list()
                 snprintf(command, sizeof(command), IPSET_DELETE_RULE, list[i].url, start_block_time);
                 system(command);
                 delete_ipset_to_chain(ipset_name);
-                printf("start_time_block: %ld\n",start_block_time);
+                //printf("start_time_block: %ld\n",start_block_time);
             }
         }
         // end extra
@@ -258,6 +245,7 @@ void run()
         system("iptables -A FORWARD -j BLOCK_IP_CHAIN");
         printf("Added BLOCK_IP_CHAIN to FORWARD chain.\n");
     }
-    printf_to_file(IP_TXT_PATH);
+    check_and_print_access_pages(IP_TXT_PATH);
     get_list();
+    printf_to_file(IP_TXT_PATH);
 }

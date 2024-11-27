@@ -1,11 +1,13 @@
 PRO_DIR := .
 OUTPUT_DIR := $(PRO_DIR)/output
 SRC_DIR := $(PRO_DIR)/src
-CC := /home/test/Documents/buildroot-2015.05/output/host/usr/bin/mips-buildroot-linux-uclibc-gcc
-#CC := gcc
+#CC := /home/test/Documents/buildroot-2015.05/output/host/usr/bin/mips-buildroot-linux-uclibc-gcc
+CC := gcc
 
 LIB_DIR := $(PRO_DIR)/include
 BIN := $(PRO_DIR)/bin
+DATA_DIR := $(PRO_DIR)/data
+DOMAIN_DIR := $(PRO_DIR)/domain
 
 CFLAGS := -g -std=c99
 #CFLAGS := -g
@@ -29,3 +31,4 @@ $(OUTPUT_DIR):
 clean:
 	rm -rf $(OUTPUT_DIR)/*
 	rm -rf $(BIN)/*
+	rm -rf $(DOMAIN_DIR)/*

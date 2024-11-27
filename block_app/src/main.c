@@ -43,11 +43,12 @@ void* app1(void* arg) {
 
 void* app2(void* arg) {
     //signal(SIGINT,delete_iptable_rules_chain_and_ipset);
+    
     while (1) {
         clear_file_to_run(IP_FILE);
         clear_file_to_run(CHECK_FILE);
         run();
-        sleep(2);
+        sleep(4);
     }
 }
 
