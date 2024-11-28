@@ -30,6 +30,7 @@ bool is_line_in_file(FILE *file, const char *line)
     return false;
 }
 
+
 website_block *read_block_web(const char *filename, int *line_count)
 {
     website_block *list_block_web = NULL;
@@ -290,7 +291,6 @@ domain_file *read_domain_file(const char *filename, int *count)
             (*count)++;
         }
     }
-
     fclose(file);
     return list;
 }
@@ -354,6 +354,68 @@ web_block_info *get_web_block_info(int *out_count)
     *out_count = result_count;
     return result_list;
 }
+
+
+
+// new code
+web_block_info *get_web_block_info_in_domain_file(const char* filename, int *out_count)
+{
+    int line_count = 0;
+    website_block *list_block = read_block_web(BLOCK_WEB_TXT_PATH, &line_count);
+    int entry_count = 0;
+    website_info *list_info = read_data_file(filename, &entry_count);
+    if (list_block == NULL || list_info == NULL)
+    {
+        *out_count = 0;
+        return NULL;
+    }
+    int result_capacity = 10;
+    int result_count = 0;
+    web_block_info *result_list = malloc(result_capacity * sizeof(web_block_info));
+    if (result_list == NULL)
+    {
+        perror("Unable to allocate memory");
+        free(list_block);
+        free(list_info);
+        *out_count = 0;
+        return NULL;
+    }
+    for (int i = 0; i < line_count; i++)
+    {
+        for (int j = 0; j < entry_count; j++)
+        {
+            if (strcmp(list_block[i].url, list_info[j].url) == 0)
+            {
+                if (result_count >= result_capacity)
+                {
+                    result_capacity *= 2;
+                    result_list = realloc(result_list, result_capacity * sizeof(web_block_info));
+                    if (result_list == NULL)
+                    {
+                        perror("Unable to allocate memory");
+                        free(list_block);
+                        free(list_info);
+                        *out_count = 0;
+                        return NULL;
+                    }
+                }
+                strncpy(result_list[result_count].url, list_block[i].url, MAX_LENGTH);
+                strncpy(result_list[result_count].ip, list_info[j].ip, MAX_LENGTH);
+                strncpy(result_list[result_count].start_day, list_block[i].start_day, MAX_LENGTH);
+                strncpy(result_list[result_count].start_time, list_block[i].start_time, MAX_LENGTH);
+                strncpy(result_list[result_count].end_day, list_block[i].end_day, MAX_LENGTH);
+                strncpy(result_list[result_count].end_time, list_block[i].end_time, MAX_LENGTH);
+                result_count++;
+            }
+        }
+    }
+    free(list_block);
+    free(list_info);
+    *out_count = result_count;
+    return result_list;
+}
+// end new code
+
 
 web_block_info *get_web_block_info_to_file(const char *filename, int *out_count)
 {
@@ -505,6 +567,49 @@ void printf_to_file(const char *filename)
     free(list);
 }
 
+// new code
+// void check_and_print_access_pages(const char *filename)
+// {
+//     FILE *file = fopen(filename, "a+");
+//     if (file == NULL)
+//     {
+//         perror("Unable to open file");
+//         return;
+//     }
+//     int num_struct = 0;
+//     domain_file *list_domain_file = read_domain_file("../../block_app/data/list_domain_file.txt", &num_struct);
+
+//     int result_count = 0;
+//     website_block *list_block = read_block_web(BLOCK_WEB_TXT_PATH, &result_count);
+
+//     for (int i = 0; i < result_count; i++)
+//     {
+//         for (int j = 0; j < num_struct; j++)
+//         {
+//             if (strcmp(list_domain_file[j].domain_name, list_block[i].url) == 0)
+//             {
+//                 int number_line = 0;
+//                 web_block_info *list = get_web_block_info_in_domain_file(list_domain_file[j].file_path, &number_line);
+//                 for (int k = 0; k < number_line; k++)
+//                 {
+//                     char line[256];
+//                     snprintf(line, sizeof(line), "%s,%s,%s,%s,%s,%s\n",
+//                              list[k].url,
+//                              list[k].ip,
+//                              list[k].start_day,
+//                              list[k].start_time,
+//                              list[k].end_day,
+//                              list[k].end_time);
+//                     if (!is_line_in_file(file, line))
+//                     {
+//                         fprintf(file, "%s", line);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
 void check_and_print_access_pages(const char *filename)
 {
     FILE *file = fopen(filename, "a+");
@@ -513,21 +618,21 @@ void check_and_print_access_pages(const char *filename)
         perror("Unable to open file");
         return;
     }
-
+    
     int num_struct = 0;
     domain_file *list_domain_file = read_domain_file("../../block_app/data/list_domain_file.txt", &num_struct);
 
     int result_count = 0;
-    web_block_info *list_web_block_info = get_web_block_info(&result_count);
+    website_block *list_block = read_block_web(BLOCK_WEB_TXT_PATH, &result_count);
 
     for (int i = 0; i < result_count; i++)
     {
         for (int j = 0; j < num_struct; j++)
         {
-            if (strcmp(list_domain_file[j].domain_name, list_web_block_info[i].url) == 0)
+            if (strcmp(list_domain_file[j].domain_name, list_block[i].url) == 0)
             {
                 int number_line = 0;
-                web_block_info *list = get_web_block_info_to_file(list_domain_file[j].file_path, &number_line);
+                web_block_info *list = get_web_block_info_in_domain_file(list_domain_file[j].file_path, &number_line);
                 for (int k = 0; k < number_line; k++)
                 {
                     char line[256];
@@ -546,8 +651,12 @@ void check_and_print_access_pages(const char *filename)
             }
         }
     }
+    fclose(file);
+    free(list_domain_file);
+    free(list_block);
 }
 
+// end new code
 void printf_ip_and_time_to_console()
 {
     int result_count = 0;

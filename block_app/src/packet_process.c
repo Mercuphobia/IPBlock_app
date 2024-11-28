@@ -21,15 +21,15 @@
 
 #define PORT_DNS 53
 
-#define RULE_DELETE_INPUT_SPORT "iptables -D INPUT -p udp --sport 53 -j NFQUEUE --queue-num 0"
-#define RULE_DELETE_INPUT_DPORT "iptables -D INPUT -p udp --dport 53 -j NFQUEUE --queue-num 0"
-#define RULE_DELETE_OUTPUT_SPORT "iptables -D OUTPUT -p udp --sport 53 -j NFQUEUE --queue-num 0"
-#define RULE_DELETE_OUTPUT_DPORT "iptables -D OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_DELETE_INPUT_SPORT "iptables -D INPUT -p udp --sport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_DELETE_INPUT_DPORT "iptables -D INPUT -p udp --dport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_DELETE_OUTPUT_SPORT "iptables -D OUTPUT -p udp --sport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_DELETE_OUTPUT_DPORT "iptables -D OUTPUT -p udp --dport 53 -j NFQUEUE --queue-num 0"
 
-#define RULE_INPUT_SPORT "iptables -I INPUT 1 -p udp --sport 53 -j NFQUEUE --queue-num 0"
-#define RULE_INPUT_DPORT "iptables -I INPUT 1 -p udp --dport 53 -j NFQUEUE --queue-num 0"
-#define RULE_OUTPUT_SPORT "iptables -I OUTPUT 1 -p udp --sport 53 -j NFQUEUE --queue-num 0"
-#define RULE_OUTPUT_DPORT "iptables -I OUTPUT 1 -p udp --dport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_INPUT_SPORT "iptables -I INPUT 1 -p udp --sport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_INPUT_DPORT "iptables -I INPUT 1 -p udp --dport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_OUTPUT_SPORT "iptables -I OUTPUT 1 -p udp --sport 53 -j NFQUEUE --queue-num 0"
+// #define RULE_OUTPUT_DPORT "iptables -I OUTPUT 1 -p udp --dport 53 -j NFQUEUE --queue-num 0"
 
 
 #define FILE_DATA "../../block_app/data/data.txt"
@@ -43,6 +43,8 @@
 
 #define RULE_ADD_TO_INPUT "iptables -I INPUT -j RESOLVE_CHAIN"
 #define RULE_ADD_TO_OUTPUT "iptables -I OUTPUT -j RESOLVE_CHAIN"
+//
+#define RULE_ADD_TO_FORWARD "iptables -I FORWARD -j RESOLVE_CHAIN"
 
 // Các quy tắc thêm vào chain
 #define RULE_ADD_DNS_SPORT "iptables -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
@@ -128,6 +130,9 @@ void add_rules_iptables()
     }
     if (system("iptables -L OUTPUT | grep -q RESOLVE_CHAIN") != 0) {
         system(RULE_ADD_TO_OUTPUT);
+    }
+    if (system("iptables -L FORWARD | grep -q RESOLVE_CHAIN") != 0) {
+        system(RULE_ADD_TO_FORWARD);
     }
     if (system("iptables -L RESOLVE_CHAIN | grep -q 'sport 53'") != 0) {
         system(RULE_ADD_DNS_SPORT);

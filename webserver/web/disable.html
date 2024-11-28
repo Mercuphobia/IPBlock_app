@@ -322,36 +322,116 @@
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
 
-        function confirm() {
+        // function confirm() {
+        //     var enable_btn = document.getElementById('enableBtn');
+        //     var disable_btn = document.getElementById('disableBtn');
+        //     var is_enable_active = !enable_btn.disabled;
+        //     var is_disable_active = !disable_btn.disabled;
+        //     console.log("Enable button active:", is_enable_active);
+        //     console.log("Disable button active:", is_disable_active);
+        //     if (is_enable_active == true && is_disable_active == false) {
+        //         const urlItems = document.getElementById('url-items').children;
+        //         if (urlItems.length === 0) {
+        //             alert('You haven\'t added any websites to block');
+        //             return;
+        //         }
+        //         else {
+        //             alert("You must enable the feature first");
+        //         }
+        //         location.reload();
+        //     }
+        //     if (is_enable_active == false && is_disable_active == true) {
+        //         const urlItems = document.getElementById('url-items').children;
+        //         if (urlItems.length === 0) {
+        //             alert('You haven\'t added any websites to block');
+        //             return;
+        //         }
+        //         else {
+        //             disableApp();
+        //             fetch('/clear-data')
+        //                 .then(function (response) {
+        //                     return response.json;
+        //                 })
+
+        //             let textData = '';
+        //             for (let i = 0; i < urlItems.length; i++) {
+        //                 const urlItemText = urlItems[i].querySelector('span').textContent;
+        //                 const urlItem = urlItemText.split(', ');
+
+        //                 const url = urlItem[0].split(': ')[1];
+        //                 const start = urlItem[1].split(': ')[1];
+        //                 const end = urlItem[2].split(': ')[1];
+
+        //                 textData += `${url}, ${start}, ${end}\n`;
+        //             }
+        //             textData = textData.trim();
+
+        //             fetch('/save-data', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Content-Type': 'text/plain'
+        //                 },
+        //                 body: textData
+        //             })
+        //                 .then(response => response.json())
+        //                 .then(data => {
+        //                     console.log(data);
+        //                     document.getElementById('url-items').innerHTML = '';
+        //                     loadFileData();
+        //                 })
+        //                 .catch((error) => {
+        //                     console.error('Error:', error);
+        //                     alert('An error occurred while sending data!');
+        //                 });
+
+        //         }
+        //     }
+        // }
+
+
+
+        // update lai code
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async function confirm() {
             var enable_btn = document.getElementById('enableBtn');
             var disable_btn = document.getElementById('disableBtn');
             var is_enable_active = !enable_btn.disabled;
             var is_disable_active = !disable_btn.disabled;
+
             console.log("Enable button active:", is_enable_active);
             console.log("Disable button active:", is_disable_active);
-            if (is_enable_active == true && is_disable_active == false) {
+
+            if (is_enable_active && !is_disable_active) {
                 const urlItems = document.getElementById('url-items').children;
                 if (urlItems.length === 0) {
                     alert('You haven\'t added any websites to block');
                     return;
-                }
-                else {
+                } else {
                     alert("You must enable the feature first");
                 }
                 location.reload();
+                return;
             }
-            if (is_enable_active == false && is_disable_active == true) {
+
+            if (!is_enable_active && is_disable_active) {
                 const urlItems = document.getElementById('url-items').children;
                 if (urlItems.length === 0) {
                     alert('You haven\'t added any websites to block');
                     return;
                 }
-                else {
-                    disableApp();
-                    fetch('/clear-data')
-                        .then(function (response) {
-                            return response.json;
-                        })
+
+                disableApp();
+
+                try {
+                    const clearResponse = await fetch('/clear-data');
+                    if (!clearResponse.ok) {
+                        throw new Error('Failed to clear data');
+                    }
+                    console.log('Data cleared successfully');
+
+                    await delay(1000);
 
                     let textData = '';
                     for (let i = 0; i < urlItems.length; i++) {
@@ -365,28 +445,29 @@
                         textData += `${url}, ${start}, ${end}\n`;
                     }
                     textData = textData.trim();
-
-                    fetch('/save-data', {
+                    const saveResponse = await fetch('/save-data', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'text/plain'
+                            'Content-Type': 'text/plain',
                         },
-                        body: textData
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            document.getElementById('url-items').innerHTML = '';
-                            loadFileData();
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                            alert('An error occurred while sending data!');
-                        });
+                        body: textData,
+                    });
+                    if (!saveResponse.ok) {
+                        throw new Error('Failed to save data');
+                    }
+                    const saveData = await saveResponse.json();
+                    console.log('Data saved successfully:', saveData);
 
+                    document.getElementById('url-items').innerHTML = '';
+                    loadFileData();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred during the process!');
                 }
             }
         }
+
+        // end update lai code
     </script>
 </body>
 

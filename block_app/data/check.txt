@@ -1,3 +1,2 @@
-dantri.com.vn, 83460, 440520
-thanhnien.vn, 43920, 444780
-liquipedia.net, 9660, 442560
+thanhnien.vn, 40260, 385860
+dantri.com.vn, 40260, 385860
