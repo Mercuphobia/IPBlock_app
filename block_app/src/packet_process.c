@@ -39,16 +39,21 @@
 
 #define RULE_CREATE_CHAIN "iptables -N RESOLVE_CHAIN"
 #define RULE_DELETE_CHAIN "iptables -F RESOLVE_CHAIN && iptables -D INPUT -j RESOLVE_CHAIN && iptables -D OUTPUT -j RESOLVE_CHAIN && iptables -X RESOLVE_CHAIN"
-#define CHECK_NAME_CHAIN "iptables -L RESOLVE_CHAIN >/dev/null 2>&1"
+
 
 #define RULE_ADD_TO_INPUT "iptables -I INPUT -j RESOLVE_CHAIN"
 #define RULE_ADD_TO_OUTPUT "iptables -I OUTPUT -j RESOLVE_CHAIN"
-//
 #define RULE_ADD_TO_FORWARD "iptables -I FORWARD -j RESOLVE_CHAIN"
 
-// Các quy tắc thêm vào chain
 #define RULE_ADD_DNS_SPORT "iptables -A RESOLVE_CHAIN -p udp --sport 53 -j NFQUEUE --queue-num 0"
 #define RULE_ADD_DNS_DPORT "iptables -A RESOLVE_CHAIN -p udp --dport 53 -j NFQUEUE --queue-num 0"
+
+#define CHECK_NAME_CHAIN "iptables -L RESOLVE_CHAIN >/dev/null 2>&1"
+#define CHECK_RESOLVE_CHAIN_INPUT "iptables -L INPUT | grep -q RESOLVE_CHAIN"
+#define CHECK_RESOLVE_CHAIN_OUTPUT "iptables -L OUTPUT | grep -q RESOLVE_CHAIN"
+#define CHECK_RESOLVE_CHAIN_FORWARD "iptables -L FORWARD | grep -q RESOLVE_CHAIN"
+#define CHECK_RULE_DNS_SPORT "iptables -L RESOLVE_CHAIN | grep -q 'sport 53'"
+#define CHECK_RULE_DNS_DPORT "iptables -L RESOLVE_CHAIN | grep -q 'dport 53'"
 
 
 void cleanup()
@@ -125,19 +130,19 @@ void add_rules_iptables()
     if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
     }
-    if (system("iptables -L INPUT | grep -q RESOLVE_CHAIN") != 0) {
+    if (system(CHECK_RESOLVE_CHAIN_INPUT) != 0) {
         system(RULE_ADD_TO_INPUT);
     }
-    if (system("iptables -L OUTPUT | grep -q RESOLVE_CHAIN") != 0) {
+    if (system(CHECK_RESOLVE_CHAIN_OUTPUT) != 0) {
         system(RULE_ADD_TO_OUTPUT);
     }
-    if (system("iptables -L FORWARD | grep -q RESOLVE_CHAIN") != 0) {
+    if (system(CHECK_RESOLVE_CHAIN_FORWARD) != 0) {
         system(RULE_ADD_TO_FORWARD);
     }
-    if (system("iptables -L RESOLVE_CHAIN | grep -q 'sport 53'") != 0) {
+    if (system(CHECK_RULE_DNS_SPORT) != 0) {
         system(RULE_ADD_DNS_SPORT);
     }
-    if (system("iptables -L RESOLVE_CHAIN | grep -q 'dport 53'") != 0) {
+    if (system(CHECK_RULE_DNS_DPORT) != 0) {
         system(RULE_ADD_DNS_DPORT);
     }
     LOG(LOG_LVL_DEBUG, "test_rules_iptables: %s, %s, %d\n", __FILE__, __func__, __LINE__);

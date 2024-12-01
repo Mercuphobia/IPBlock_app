@@ -51,7 +51,7 @@ void add_record(const char *domain, const char *ip_address)
         recorded_list = realloc(recorded_list, recorded_capacity * sizeof(record));
         if (!recorded_list)
         {
-            fprintf(stderr, "Không thể cấp phát bộ nhớ!\n");
+            fprintf(stderr, "Unable to allocate memory!\n");
             exit(1);
         }
     }
@@ -345,9 +345,6 @@ void printf_dns_answer_to_folder_and_file(unsigned char *dns_answer, unsigned ch
         {
             return;
         }
-
-
-
         create_file_if_not_exists(folder,domain_name);
         char filepath[512];
         snprintf(filepath, sizeof(filepath), "%s/%s.txt", (char *)folder, domain_name);
@@ -382,22 +379,3 @@ void printf_dns_answer_to_folder_and_file(unsigned char *dns_answer, unsigned ch
         fclose(list_file);
     }
 }
-
-// int get_dns_name(unsigned char *dns, unsigned char *name, int *offset)
-// {
-//     int i = 0, j = 0;
-//     while (dns[i] != 0)
-//     {
-//         int len = dns[i];
-//         for (j = 0; j < len; j++)
-//         {
-//             name[j + *offset] = dns[i + 1 + j];
-//         }
-//         *offset += len;
-//         name[*offset] = '.';
-//         *offset += 1;
-//         i += len + 1;
-//     }
-//     name[*offset - 1] = '\0';
-//     return *offset;
-// }
