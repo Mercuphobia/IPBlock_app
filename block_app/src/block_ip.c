@@ -237,9 +237,8 @@ void delete_iptable_rules_chain_and_ipset()
     }
 }
 
-void run()
-{
-    if (system(CHECK_NAME_CHAIN) != 0) {
+void add_create_and_add_chain(){
+        if (system(CHECK_NAME_CHAIN) != 0) {
         system(RULE_CREATE_CHAIN);
     }
     if (system(CHECK_BLOCK_IP_CHAIN_INPUT) != 0) {
@@ -254,8 +253,28 @@ void run()
         system(IP_TABLES_ADD_CHAIN_FORWARD);
         printf("Added BLOCK_IP_CHAIN to FORWARD chain.\n");
     }
+}
+
+void run()
+{
+    // if (system(CHECK_NAME_CHAIN) != 0) {
+    //     system(RULE_CREATE_CHAIN);
+    // }
+    // if (system(CHECK_BLOCK_IP_CHAIN_INPUT) != 0) {
+    //     system(IP_TABLES_ADD_CHAIN_INPUT);
+    //     printf("Added BLOCK_IP_CHAIN to INPUT chain.\n");
+    // }
+    // if (system(CHECK_BLOCK_IP_CHAIN_OUTPUT) != 0) {
+    //     system(IP_TABLES_ADD_CHAIN_OUTPUT);
+    //     printf("Added BLOCK_IP_CHAIN to OUTPUT chain.\n");
+    // }
+    // if (system(CHECK_BLOCK_IP_CHAIN_FORWARD) != 0) {
+    //     system(IP_TABLES_ADD_CHAIN_FORWARD);
+    //     printf("Added BLOCK_IP_CHAIN to FORWARD chain.\n");
+    // }
+    add_create_and_add_chain();
     check_and_print_access_pages(IP_TXT_PATH);
     get_list();
-    printf_to_file(IP_TXT_PATH);
-    get_list();
+    //printf_to_file(IP_TXT_PATH);
+    //get_list();
 }

@@ -131,7 +131,6 @@
                 </div>
             </div>
         </div>
-
         <!-- list block -->
         <div class="container custom">
             <div class="row">
@@ -194,16 +193,12 @@
                 const isEnable = data.state === "true";
                 console.log(data.state);
                 toggleButtonState(isEnable);
-                //localStorage.setItem('isEnable', isEnable ? 'true' : 'false');
             } catch (error) {
                 console.error('Error loading state:', error);
             }
             loadFileData();
         };
-
         // end extra
-
-
         function loadFileData() {
             fetch('/load-data')
                 .then(response => {
@@ -265,7 +260,7 @@
                 });
         }
 
-        var over_state = document.getElementById('overlay');
+        var overState = document.getElementById('overlay');
         async function enableApp() {
             try {
                 await sendAppRequest('start');
@@ -273,9 +268,9 @@
                 toggleButtonState(true);
                 console.log("App started and button state updated.");
                 updateStateInFile(true);
-                over_state.style.display = 'flex'; 
+                overState.style.display = 'flex'; 
                 setTimeout(function() {
-                    over_state.style.display = 'none';
+                    overState.style.display = 'none';
                     console.log("Overlay hidden after 10 seconds.");
                 }, 10000);
 
@@ -291,9 +286,9 @@
                 toggleButtonState(false);
                 console.log("App stopped and button state updated.");
                 updateStateInFile(false);
-                over_state.style.display = 'flex'; 
+                overState.style.display = 'flex'; 
                 setTimeout(function() {
-                    over_state.style.display = 'none';
+                    overState.style.display = 'none';
                     console.log("Overlay hidden after 10 seconds.");
                 }, 10000);
 
@@ -318,92 +313,23 @@
             });
         }
 
-
         document.getElementById('enableBtn').onclick = enableApp;
         document.getElementById('disableBtn').onclick = disableApp;
-
-        // function confirm() {
-        //     var enable_btn = document.getElementById('enableBtn');
-        //     var disable_btn = document.getElementById('disableBtn');
-        //     var is_enable_active = !enable_btn.disabled;
-        //     var is_disable_active = !disable_btn.disabled;
-        //     console.log("Enable button active:", is_enable_active);
-        //     console.log("Disable button active:", is_disable_active);
-        //     if (is_enable_active == true && is_disable_active == false) {
-        //         const urlItems = document.getElementById('url-items').children;
-        //         if (urlItems.length === 0) {
-        //             alert('You haven\'t added any websites to block');
-        //             return;
-        //         }
-        //         else {
-        //             alert("You must enable the feature first");
-        //         }
-        //         location.reload();
-        //     }
-        //     if (is_enable_active == false && is_disable_active == true) {
-        //         const urlItems = document.getElementById('url-items').children;
-        //         if (urlItems.length === 0) {
-        //             alert('You haven\'t added any websites to block');
-        //             return;
-        //         }
-        //         else {
-        //             disableApp();
-        //             fetch('/clear-data')
-        //                 .then(function (response) {
-        //                     return response.json;
-        //                 })
-
-        //             let textData = '';
-        //             for (let i = 0; i < urlItems.length; i++) {
-        //                 const urlItemText = urlItems[i].querySelector('span').textContent;
-        //                 const urlItem = urlItemText.split(', ');
-
-        //                 const url = urlItem[0].split(': ')[1];
-        //                 const start = urlItem[1].split(': ')[1];
-        //                 const end = urlItem[2].split(': ')[1];
-
-        //                 textData += `${url}, ${start}, ${end}\n`;
-        //             }
-        //             textData = textData.trim();
-
-        //             fetch('/save-data', {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Content-Type': 'text/plain'
-        //                 },
-        //                 body: textData
-        //             })
-        //                 .then(response => response.json())
-        //                 .then(data => {
-        //                     console.log(data);
-        //                     document.getElementById('url-items').innerHTML = '';
-        //                     loadFileData();
-        //                 })
-        //                 .catch((error) => {
-        //                     console.error('Error:', error);
-        //                     alert('An error occurred while sending data!');
-        //                 });
-
-        //         }
-        //     }
-        // }
-
-
 
         // update lai code
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         async function confirm() {
-            var enable_btn = document.getElementById('enableBtn');
-            var disable_btn = document.getElementById('disableBtn');
-            var is_enable_active = !enable_btn.disabled;
-            var is_disable_active = !disable_btn.disabled;
+            var enableBtn = document.getElementById('enableBtn');
+            var disableBtn = document.getElementById('disableBtn');
+            var isEnableActive = !enableBtn.disabled;
+            var isDisableActive = !disableBtn.disabled;
 
-            console.log("Enable button active:", is_enable_active);
-            console.log("Disable button active:", is_disable_active);
+            console.log("Enable button active:", isEnableActive);
+            console.log("Disable button active:", isDisableActive);
 
-            if (is_enable_active && !is_disable_active) {
+            if (isEnableActive && !isDisableActive) {
                 const urlItems = document.getElementById('url-items').children;
                 if (urlItems.length === 0) {
                     alert('You haven\'t added any websites to block');
@@ -415,7 +341,7 @@
                 return;
             }
 
-            if (!is_enable_active && is_disable_active) {
+            if (!isEnableActive && isDisableActive) {
                 const urlItems = document.getElementById('url-items').children;
                 if (urlItems.length === 0) {
                     alert('You haven\'t added any websites to block');
@@ -466,9 +392,7 @@
                 }
             }
         }
-
         // end update lai code
     </script>
 </body>
-
 </html>
